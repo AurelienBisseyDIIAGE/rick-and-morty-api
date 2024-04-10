@@ -2,6 +2,7 @@ package org.mathieu.cleanrmapi.data.remote
 
 import org.mathieu.cleanrmapi.data.remote.responses.CharacterResponse
 import org.mathieu.cleanrmapi.data.remote.responses.PaginatedResponse
+import org.mathieu.cleanrmapi.data.remote.responses.EpisodeResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -27,5 +28,10 @@ interface CharacterApi {
      */
     @GET("character/{characterId}")
     suspend fun getCharacter(@Path("characterId") id: Int): CharacterResponse?
+
+    suspend fun getEpisode(id: Int): EpisodeResponse = client
+        .get("episode/$id")
+        .accept(HttpStatusCode.OK)
+        .body()
 
 }
