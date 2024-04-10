@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -42,9 +41,11 @@ import org.mathieu.cleanrmapi.ui.core.Destination
 import org.mathieu.cleanrmapi.ui.core.composables.PreviewContent
 import org.mathieu.cleanrmapi.ui.core.navigate
 import org.mathieu.cleanrmapi.ui.core.theme.Purple40
+import androidx.compose.foundation.lazy.itemsIndexed
 
 private typealias UIState = CharactersState
 private typealias UIAction = CharactersAction
+
 
 @Composable
 fun CharactersScreen(navController: NavController) {
@@ -104,16 +105,20 @@ private fun CharactersContent(
                     lineHeight = 36.sp
                 )
             } ?: LazyColumn {
-
-                items(state.characters) {
+                //ajout d'un index
+                itemsIndexed(state.characters) { index, character ->
                     CharacterCard(
                         modifier = Modifier
                             .padding(8.dp)
                             .clickable {
-                                onAction(CharactersAction.SelectedCharacter(it))
+                                onAction(CharactersAction.SelectedCharacter(character))
                             },
-                        character = it
+                        character = character
                     )
+                    //Appel de la fonction si on est au dernier perso de la page
+                    if(index == state.characters.size-1) {
+                        onAction(CharactersAction.LoadMoreCharacters)
+                    }
                 }
 
             }
